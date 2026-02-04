@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- SECTION: Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3D Arctic Map • Three.js Globe</title>
+
+    <!-- SECTION: Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SECTION: Styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- SECTION: Three.js CDN -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  </head>
+  <body>
+    <!-- SECTION: App Shell -->
+    <div class="app-shell">
+      <!-- SECTION: Header -->
+      <header class="app-header">
+        <div class="branding">
+          <span class="branding-mark"></span>
+          <div class="branding-text">
+            <h1 class="app-title">Arctic Globe</h1>
+            <p class="app-subtitle">Interactive 3D view of the far north</p>
+          </div>
+        </div>
+        <div class="header-meta">
+          <span class="meta-pill">Three.js • WebGL</span>
+        </div>
+      </header>
+
+      <!-- SECTION: Main Layout -->
+      <main class="app-main">
+        <section class="viewer-panel" aria-label="3D Arctic globe viewer">
+          <div id="globe-container" class="globe-container"></div>
+          <div class="viewer-overlay top-left">
+            <h2 class="panel-title">Focus: Arctic region</h2>
+            <p class="panel-text">
+              Drag to orbit, scroll or pinch to zoom. The globe is oriented with the
+              <strong>North Pole</strong> at the center.
+            </p>
+          </div>
+          <div class="viewer-overlay bottom-left">
+            <div class="legend">
+              <div class="legend-item">
+                <span class="legend-swatch legend-water"></span>
+                <span class="legend-label">Ocean</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-swatch legend-ice"></span>
+                <span class="legend-label">Polar cap</span>
+              </div>
+            </div>
+          </div>
+          <div class="viewer-overlay bottom-right">
+            <div class="hint-card">
+              <p class="hint-primary">Tip: Hold right-click (or two fingers) to pan the view.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: Side Panel -->
+        <aside class="info-panel" aria-label="Globe settings and info">
+          <section class="info-card">
+            <h2 class="info-title">Viewer controls</h2>
+            <ul class="info-list">
+              <li>Drag to rotate around the pole</li>
+              <li>Scroll or pinch to zoom in and out</li>
+              <li>Right-drag to pan the camera</li>
+              <li>Double-click background to reset view</li>
+            </ul>
+          </section>
+
+          <section class="info-card">
+            <h2 class="info-title">Projection</h2>
+            <p class="info-body">
+              This globe is a stylized view centered on the Arctic. A bright polar
+              cap highlights high latitudes, while the surrounding ocean is rendered
+              in deep blue.
+            </p>
+          </section>
+
+          <section class="info-card info-card--compact">
+            <h2 class="info-title">Status</h2>
+            <dl class="info-stats">
+              <div class="info-stat-row">
+                <dt>Engine</dt>
+                <dd>Three.js WebGL</dd>
+              </div>
+              <div class="info-stat-row">
+                <dt>Mode</dt>
+                <dd>Orbit + zoom</dd>
+              </div>
+              <div class="info-stat-row">
+                <dt>Region</dt>
+                <dd>Arctic hemisphere focus</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
+      </main>
+
+      <!-- SECTION: Footer -->
+      <footer class="app-footer">
+        <p class="footer-text">
+          Built with <span class="accent">Three.js</span> for an interactive view of
+          our planet's northernmost latitudes.
+        </p>
+      </footer>
+    </div>
+
+    <!-- SECTION: Scripts -->
+    <script src="script.js"></script>
+  </body>
+</html>
