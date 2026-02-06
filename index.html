@@ -4,7 +4,7 @@
     <!-- SECTION: Meta -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>3D Arctic Map • Three.js Globe</title>
+    <title>3D Arctic Map</title>
 
     <!-- SECTION: Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="style.css" />
 
     <!-- SECTION: Three.js CDN -->
-    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-    <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+<!-- SECTION: Three.js CDN - CORREGIDO -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   </head>
   <body>
     <!-- SECTION: App Shell -->
@@ -27,10 +28,10 @@
       <!-- SECTION: Header -->
       <header class="app-header">
         <div class="branding">
-          <span class="branding-mark"></span>
+          
           <div class="branding-text">
-            <h1 class="app-title">Arctic Globe</h1>
-            <p class="app-subtitle">Interactive 3D view of the far north</p>
+            <h1 class="app-title"> 🌐 Arctic Globe</h1>
+            <p class="app-subtitle">Interactive 3D view of the Arctic</p>
           </div>
         </div>
         <div class="header-meta">
@@ -45,8 +46,7 @@
           <div class="viewer-overlay top-left">
             <h2 class="panel-title">Focus: Arctic region</h2>
             <p class="panel-text">
-              Drag to orbit, scroll or pinch to zoom. The globe is oriented with the
-              <strong>North Pole</strong> at the center.
+              Drag to orbit and scroll to zoom.
             </p>
           </div>
           <div class="viewer-overlay bottom-left">
@@ -74,7 +74,7 @@
             <h2 class="info-title">Viewer controls</h2>
             <ul class="info-list">
               <li>Drag to rotate around the pole</li>
-              <li>Scroll or pinch to zoom in and out</li>
+              <li>Scroll to zoom in and out</li>
               <li>Right-drag to pan the camera</li>
               <li>Double-click background to reset view</li>
             </ul>
@@ -102,7 +102,7 @@
               </div>
               <div class="info-stat-row">
                 <dt>Region</dt>
-                <dd>Arctic hemisphere focus</dd>
+                <dd>Arctic focus</dd>
               </div>
             </dl>
           </section>
@@ -119,6 +119,6 @@
     </div>
 
     <!-- SECTION: Scripts -->
-    <script src="script.js"></script>
+    <script src="script_plano.js"></script>
   </body>
 </html>
