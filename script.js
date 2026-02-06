@@ -2,142 +2,152 @@
 
 // SECTION: Scene setup
 let scene, camera, renderer, controls;
-let globe, atmosphere, halo;
+let arcticTerrain, gridHelper;
 
 init();
 animate();
 
 function init() {
   const container = document.getElementById("globe-container");
-  const { width, height } = container.getBoundingClientRect();
+  
+  // Obtener dimensiones reales del contenedor
+  const width = container.clientWidth;
+  const height = container.clientHeight;
 
   // Scene
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x02030a);
 
-  // Camera
-  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 2000);
-  camera.position.set(0, 0, 7.5);
+  // Camera - vista isométrica/aérea
+  camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+  camera.position.set(0, 12, 12);
+  camera.lookAt(0, 0, 0);
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio || 1.5);
   renderer.setSize(width, height);
-  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  
+  // Asegurar que el canvas llene el contenedor
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
+  renderer.domElement.style.display = 'block';
+  
   container.appendChild(renderer.domElement);
 
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0xbcc7ff, 0.7);
+  // SECTION: Iluminación optimizada para relieve
+  const ambientLight = new THREE.AmbientLight(0x6688bb, 0.4);
   scene.add(ambientLight);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.15);
-  directionalLight.position.set(5, 7, 3);
-  scene.add(directionalLight);
+  // Luz principal desde arriba-lateral
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  mainLight.position.set(10, 15, 8);
+  mainLight.castShadow = true;
+  mainLight.shadow.mapSize.width = 2048;
+  mainLight.shadow.mapSize.height = 2048;
+  scene.add(mainLight);
 
-  // SECTION: Tile system
-  const ZOOM = 12;
-  const TILE_URL = "tiles_mde/{z}/{x}/{y}.png";
+  // Luz rasante para resaltar relieve
+  const rimLight = new THREE.DirectionalLight(0xaaccff, 0.8);
+  rimLight.position.set(-12, 3, -5);
+  scene.add(rimLight);
 
-  function uvToTile(u, v, zoom) {
-    const tiles = Math.pow(2, zoom);
-    const x = Math.floor(u * tiles);
-    const y = Math.floor((1 - v) * tiles);
-    return { x, y };
-  }
+  // Luz de relleno desde abajo
+  const fillLight = new THREE.DirectionalLight(0x4488cc, 0.3);
+  fillLight.position.set(0, -5, 8);
+  scene.add(fillLight);
 
-  function createTiledGlobe() {
-    const radius = 3;
-    const segmentsX = 32; // número de parches horizontales
-    const segmentsY = 16; // número de parches verticales
+  // SECTION: Cargar heightmap del Ártico
+  const textureLoader = new THREE.TextureLoader();
+  
+  textureLoader.load('dem.png', function(heightmap) {
+    console.log('Heightmap del Ártico cargado');
+    
+    // SECTION: Geometría plana del Ártico
+    const planeSize = 10; // Tamaño del plano
+    const segments = 512; // Alta resolución para el detalle
+    
+    const terrainGeometry = new THREE.PlaneGeometry(
+      planeSize, 
+      planeSize, 
+      segments, 
+      segments
+    );
 
-    const group = new THREE.Group();
+    // Material con heightmap
+    const terrainMaterial = new THREE.MeshStandardMaterial({
+      color: 0xe8f4ff, // Blanco azulado para hielo/nieve
+      roughness: 0.75,
+      metalness: 0.15,
+      displacementMap: heightmap,
+      displacementScale: 0.2, // Exageración vertical moderada
+      map: heightmap, // Usar el heightmap como textura de color
+      side: THREE.DoubleSide,
+    });
 
-    for (let i = 0; i < segmentsX; i++) {
-      for (let j = 0; j < segmentsY; j++) {
+    arcticTerrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
+    arcticTerrain.rotation.x = -Math.PI / 2; // Rotar para que sea horizontal
+    arcticTerrain.receiveShadow = true;
+    arcticTerrain.castShadow = true;
+    scene.add(arcticTerrain);
 
-        const geom = new THREE.SphereGeometry(
-          radius,
-          8, 8,
-          (i / segmentsX) * Math.PI * 2,
-          (1 / segmentsX) * Math.PI * 2,
-          (j / segmentsY) * Math.PI,
-          (1 / segmentsY) * Math.PI
-        );
+    // SECTION: Plano base (océano)
+    const oceanGeometry = new THREE.PlaneGeometry(planeSize * 1.2, planeSize * 1.2);
+    const oceanMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0a2850,
+      roughness: 0.3,
+      metalness: 0.6,
+      transparent: true,
+      opacity: 0.8,
+    });
+    
+    const ocean = new THREE.Mesh(oceanGeometry, oceanMaterial);
+    ocean.rotation.x = -Math.PI / 2;
+    ocean.position.y = -0.3; // Debajo del terreno
+    ocean.receiveShadow = true;
+    scene.add(ocean);
 
-        const u = (i + 0.5) / segmentsX;
-        const v = (j + 0.5) / segmentsY;
+    // SECTION: Borde del mapa
+    const edgesGeometry = new THREE.EdgesGeometry(terrainGeometry);
+    const edgesMaterial = new THREE.LineBasicMaterial({ 
+      color: 0x4de2ff, 
+      transparent: true, 
+      opacity: 0.3 
+    });
+    const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+    edges.rotation.x = -Math.PI / 2;
+    edges.position.y = 0.01;
+    scene.add(edges);
 
-        const { x, y } = uvToTile(u, v, ZOOM);
-
-        const url = TILE_URL
-          .replace("{z}", ZOOM)
-          .replace("{x}", x)
-          .replace("{y}", y);
-
-        const tex = new THREE.TextureLoader().load(url);
-
-        const mat = new THREE.MeshBasicMaterial({
-          map: tex,
-        });
-
-        const mesh = new THREE.Mesh(geom, mat);
-        group.add(mesh);
-      }
-    }
-
-    return group;
-  }
-
-  // SECTION: Create globe with all tiles
-  globe = createTiledGlobe();
-  scene.add(globe);
-
-  // SECTION: Atmosphere glow
-  const atmosphereGeometry = new THREE.SphereGeometry(3 * 1.08, 64, 64);
-  const atmosphereMaterial = new THREE.MeshBasicMaterial({
-    color: 0x4de2ff,
-    transparent: true,
-    opacity: 0.22,
-    side: THREE.BackSide,
+  }, undefined, function(error) {
+    console.error('Error cargando el heightmap:', error);
   });
 
-  atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-  scene.add(atmosphere);
+  // SECTION: Grid de referencia (opcional)
+  const gridHelper2 = new THREE.GridHelper(12, 20, 0x2244aa, 0x112255);
+  gridHelper2.position.y = -0.31;
+  scene.add(gridHelper2);
 
-  // Extra halo
-  const haloGeometry = new THREE.SphereGeometry(3 * 1.16, 64, 64);
-  const haloMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00ffff,
-    transparent: true,
-    opacity: 0.08,
-    side: THREE.BackSide,
-  });
-
-  halo = new THREE.Mesh(haloGeometry, haloMaterial);
-  scene.add(halo);
-
-  // SECTION: Starfield
+  // SECTION: Starfield backdrop
   const starsGeometry = new THREE.BufferGeometry();
-  const starCount = 2000;
+  const starCount = 3000;
   const positions = new Float32Array(starCount * 3);
 
   for (let i = 0; i < starCount * 3; i += 3) {
-    const r = 60;
-    const theta = Math.random() * 2 * Math.PI;
-    const phi = Math.acos(2 * Math.random() - 1);
-
-    positions[i] = r * Math.sin(phi) * Math.cos(theta);
-    positions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
-    positions[i + 2] = r * Math.cos(phi);
+    positions[i] = (Math.random() - 0.5) * 100;
+    positions[i + 1] = (Math.random() - 0.5) * 100;
+    positions[i + 2] = (Math.random() - 0.5) * 100;
   }
 
   starsGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
   const starsMaterial = new THREE.PointsMaterial({
     color: 0xffffff,
-    size: 0.08,
+    size: 0.1,
     transparent: true,
-    opacity: 0.7,
+    opacity: 0.6,
   });
 
   const stars = new THREE.Points(starsGeometry, starsMaterial);
@@ -148,21 +158,19 @@ function init() {
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.enablePan = true;
-  controls.panSpeed = 0.4;
-  controls.minDistance = 4.1;
-  controls.maxDistance = 12;
-  controls.rotateSpeed = 0.55;
+  controls.panSpeed = 0.8;
+  controls.minDistance = 6;
+  controls.maxDistance = 30;
+  controls.rotateSpeed = 0.6;
+  controls.maxPolarAngle = Math.PI / 2 - 0.1; // No ir debajo del plano
 
-  globe.rotation.x = THREE.MathUtils.degToRad(23.4);
-
-  controls.minPolarAngle = 0.2;
-  controls.maxPolarAngle = Math.PI - 0.2;
-
+  // Reset on double click
   renderer.domElement.addEventListener("dblclick", () => {
-    camera.position.set(0, 0, 7.5);
+    camera.position.set(0, 12, 12);
     controls.target.set(0, 0, 0);
   });
 
+  // SECTION: Resize handling
   window.addEventListener("resize", onWindowResize);
 }
 
@@ -170,7 +178,8 @@ function onWindowResize() {
   const container = document.getElementById("globe-container");
   if (!container) return;
 
-  const { width, height } = container.getBoundingClientRect();
+  const width = container.clientWidth;
+  const height = container.clientHeight;
 
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
@@ -182,11 +191,14 @@ function onWindowResize() {
 function animate() {
   requestAnimationFrame(animate);
 
-  if (globe) globe.rotation.y += 0.0009;
-  if (atmosphere) atmosphere.rotation.y += 0.0004;
-  if (halo) halo.rotation.y += 0.0002;
+  // Rotación suave opcional
+  if (arcticTerrain) {
+    arcticTerrain.rotation.z += 0.0003; // Muy sutil
+  }
 
-  if (controls) controls.update();
+  if (controls) {
+    controls.update();
+  }
 
   renderer.render(scene, camera);
 }
