@@ -42,23 +42,34 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 
 ---
 
-## ▶️ Demo
+## ▶️ Demoe
 
 
 
 ---
 
-## 📦 Instalación y uso
+## 📦 Instalación y uso:
 
 1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/tu-repo.git
+```bash
+   git clone https://github.com/95devFran/arctic.git
+   cd arctic
+```
 
-   Abre index.html en tu navegador
+2. Inicia el servidor:
+```bash
+   # Con Python 3
+   python -m http.server 8000
+   
+   # O con Node.js
+   npx http-server
+```
+
+3. Ábrelo en el navegador: `http://localhost:8000`
 
 Interactúa con el globo: rota, haz zoom y explora el Ártico en 3D
 
-Copyright (c) 2026 Francisco Lastres Gómez (95s_Fran)
+Copyright (c) 2026 Francisco Lastres Gómez (95devFran)
 
 ---------------------------------------
                                                                   ENGLISH
@@ -117,15 +128,29 @@ For this project, I used a **Digital Elevation Model (DEM)** of the Arctic to ge
 
 ## 📦 Install and use:
 
-1. Clone repo:
-   ```bash
-   git clone https://github.com/tuusuario/tu-repo.git
+1. Clone repository:
+```bash
+   git clone https://github.com/95devFran/arctic.git
+   cd arctic
+```
 
-   Abre index.html en tu navegador
+2. Init your server:
+```bash
+   # With Python 3
+   python -m http.server 8000
+   
+   # Or with Node.js
+   npx http-server
+```
+
+3. Open your browser: `http://localhost:8000`
+
+
+
 
 Interact with map: rotate, zoom in and zoom out the map.
 
-Copyright (c) 2026 Francisco Lastres Gómez (95s_Fran)
+Copyright (c) 2026 Francisco Lastres Gómez (95devFran)
 
 
 
