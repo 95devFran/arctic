@@ -59,7 +59,7 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 Interactúa con el globo: rota, haz zoom y explora el Ártico en 3D
 
 Copyright (c) 2026 Francisco Lastres Gómez (95s_Fran)
-******************************************************************************************************************************************************************
+*****************************************************************ENGLISH*************************************************************************************************
 
 # 🌐 Arctic 3D — Three.js + WebGL
 
