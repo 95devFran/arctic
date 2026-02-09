@@ -1,4 +1,3 @@
-
 # 🌐 Arctic 3D — Three.js + WebGL
 
 Este proyecto es una visualización 3D interactiva del Ártico, construida desde cero con **Three.js**, **WebGL** y una interfaz moderna diseñada a medida.  
@@ -60,11 +59,7 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 Interactúa con el globo: rota, haz zoom y explora el Ártico en 3D
 
 Copyright (c) 2026 Francisco Lastres Gómez (95s_Fran)
-
-
-======================================================================================================================
-                                                        ENGLISH
-======================================================================================================================
+******************************************************************************************************************************************************************
 
 # 🌐 Arctic 3D — Three.js + WebGL
 
