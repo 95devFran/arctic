@@ -1,7 +1,7 @@
-# 🌐 Arctic 3D — Three.js + WebGL
+# 🌐 Ártico 3D — Three.js + WebGL
 
 Este proyecto es una visualización 3D interactiva del Ártico, construida desde cero con **Three.js**, **WebGL** y una interfaz moderna diseñada a medida.  
-El objetivo es explorar nuevas formas de representar datos geoespaciales en entornos web 3D, combinando diseño, interacción fluida y estética sci‑fi.
+El objetivo es explorar nuevas formas de representar datos geoespaciales en entornos web 3D, combinando diseño, interacción fluida y estética tecnológica y cibernética.
 
 ---
 
@@ -18,8 +18,8 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 - 🌀 Controles de órbita suaves (rotación, zoom, desplazamiento)  
 - 🗺️ Integración de datos geoespaciales (MDE)  
 - 🎨 UI minimalista con estética sci‑fi  
-- 📱 Diseño responsive  
-- 🔧 Código modular y fácil de extender  
+- 📱 Diseño responsivo  
+- 🔧 Código modular y fácil de escalar  
 
 ---
 
@@ -42,7 +42,7 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 
 ---
 
-## ▶️ Demoe
+## ▶️ Demo
 
 
 
