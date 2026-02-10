@@ -12,7 +12,7 @@ En este caso, he utilizado un **Modelo Digital de Elevaciones (MDE)** del Ártic
 
 ---
 
-## ✨ Características principales
+## Características principales
 
 - 🌍 Renderizado 3D en tiempo real  
 - 🌀 Controles de órbita suaves (rotación, zoom, desplazamiento)  
@@ -90,7 +90,7 @@ For this project, I used a **Digital Elevation Model (DEM)** of the Arctic to ge
 
 ---
 
-### ✨ Main features
+### Main features
 
 - 🌍 Real‑time 3D rendering  
 - 🌀 Smooth orbit controls (rotate, zoom, pan)  
